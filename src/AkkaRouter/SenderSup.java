@@ -11,12 +11,20 @@ import java.util.concurrent.TimeUnit;
 public class SenderSup extends UntypedActor {
 
   public SenderSup() {
-    // create the sticky router
-    ActorRef sticky = getContext().system().actorOf(FromConfig.getInstance().props(), "sticky");
+    // create the router
+    ActorRef router = null;
+
+    if (getContext().system().settings().config().getBoolean("useStickyRouter")) {
+      System.out.println("Using StickyRouter");
+      router = getContext().system().actorOf(FromConfig.getInstance().props(), "sticky");
+    } else {
+      System.out.println("Using ConsistentHashingRouter");
+      router = getContext().system().actorOf(FromConfig.getInstance().props(), "cons");
+    }
 
     // create two sender
-    ActorRef send1 = getContext().system().actorOf(Props.create(Sender.class, sticky), "send1");
-    ActorRef send2 = getContext().system().actorOf(Props.create(Sender.class, sticky), "send2");
+    ActorRef send1 = getContext().system().actorOf(Props.create(Sender.class, router), "send1");
+    ActorRef send2 = getContext().system().actorOf(Props.create(Sender.class, router), "send2");
 
 
     // send every 2 seconds beginning after 1 second

@@ -2,6 +2,7 @@ package AkkaRouter;
 
 import akka.actor.ActorRef;
 import akka.actor.UntypedActor;
+import akka.routing.ConsistentHashingRouter.ConsistentHashableEnvelope;
 
 public class Sender extends UntypedActor {
 
@@ -14,7 +15,8 @@ public class Sender extends UntypedActor {
 
   public void onReceive(Object msg) {
     if (msg instanceof Long) {
-      router.tell(++test, getSelf());
+      ++test;
+      router.tell(new ConsistentHashableEnvelope(test, test), getSelf());
     } else if (msg instanceof String) {
       System.out.println("Sender " + getSelf().path().name() + " received response from "
           + sender().path().address().toString() + ": " + msg);
