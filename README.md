@@ -14,6 +14,7 @@ Start the Receiver:
  send.conf
  
     useStickyRouter = true
+    numberOfUniqueMessages = 20
 
     akka {
       loggers = ["akka.event.slf4j.Slf4jLogger"]
