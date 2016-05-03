@@ -8,7 +8,7 @@ public class Receiver extends UntypedActor {
   @Override
   public void onReceive(Object msg) throws Exception {
     if (msg instanceof Long) {
-      sender().tell(String.valueOf((Long) msg), getSelf());
+      sender().tell(String.valueOf(msg), getSelf());
     } else {
       unhandled(msg);
     }

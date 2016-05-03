@@ -6,16 +6,19 @@ import akka.routing.ConsistentHashingRouter.ConsistentHashableEnvelope;
 
 public class Sender extends UntypedActor {
 
-  ActorRef router;
-  Long test = 0L;
+  private ActorRef router;
+  private Integer numberOfUniqueMessages;
+  private Long test = 0L;
 
   public Sender(ActorRef router) {
     this.router = router;
+    this.numberOfUniqueMessages =
+        getContext().system().settings().config().getInt("numberOfUniqueMessages");
   }
 
   public void onReceive(Object msg) {
     if (msg instanceof Long) {
-      ++test;
+      test = (test % numberOfUniqueMessages) + 1;
       if (router.path().name().equals("sticky")) {
         router.tell(test, getSelf());
       } else {
