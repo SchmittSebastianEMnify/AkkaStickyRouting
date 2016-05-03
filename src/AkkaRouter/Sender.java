@@ -25,6 +25,8 @@ public class Sender extends UntypedActor {
         router.tell(new ConsistentHashableEnvelope(test, test), getSelf());
       }
     } else if (msg instanceof String) {
+      StickyRoutingLogic.updateStickiness(Long.valueOf((String) msg),
+          getContext().actorSelection(sender().path()));
       System.out.println("Sender " + getSelf().path().name() + " received response from "
           + sender().path().address().toString() + ": " + msg);
     } else {

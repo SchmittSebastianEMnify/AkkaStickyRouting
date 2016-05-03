@@ -1,5 +1,7 @@
 package AkkaRouter;
 
+import akka.actor.ActorSelection;
+import akka.routing.ActorSelectionRoutee;
 import akka.routing.RoundRobinRoutingLogic;
 import akka.routing.Routee;
 import akka.routing.RoutingLogic;
@@ -8,7 +10,7 @@ import scala.collection.immutable.IndexedSeq;
 import java.util.HashMap;
 
 public class StickyRoutingLogic implements RoutingLogic {
-  private final HashMap<Long, Routee> ipToGi = new HashMap<Long, Routee>();
+  private static final HashMap<Long, Routee> ipToGi = new HashMap<Long, Routee>();
   private final RoutingLogic routingLogic;
 
   public StickyRoutingLogic() {
@@ -30,6 +32,16 @@ public class StickyRoutingLogic implements RoutingLogic {
       return routee;
     } else {
       return routingLogic.select(message, routees);
+    }
+  }
+
+  public static void updateStickiness(Long num, ActorSelection sel) {
+    Routee newRoutee = new ActorSelectionRoutee(sel);
+    Routee oldRoutee = ipToGi.get(num);
+    if (!oldRoutee.equals(newRoutee)) {
+      ipToGi.put(num, new ActorSelectionRoutee(sel));
+      System.out.println("Updated Stickiness for " + sel.anchorPath().address().toString()
+          + " and value " + num);
     }
   }
 }
