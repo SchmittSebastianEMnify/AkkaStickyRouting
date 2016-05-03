@@ -39,7 +39,7 @@ public class StickyRoutingLogic implements RoutingLogic {
     Routee newRoutee = new ActorSelectionRoutee(sel);
     Routee oldRoutee = ipToGi.get(num);
     if (!oldRoutee.equals(newRoutee)) {
-      ipToGi.put(num, new ActorSelectionRoutee(sel));
+      ipToGi.put(num, newRoutee);
       System.out.println("Updated Stickiness for " + sel.anchorPath().address().toString()
           + " and value " + num);
     }
