@@ -16,7 +16,11 @@ public class Sender extends UntypedActor {
   public void onReceive(Object msg) {
     if (msg instanceof Long) {
       ++test;
-      router.tell(new ConsistentHashableEnvelope(test, test), getSelf());
+      if (router.path().name().equals("sticky")) {
+        router.tell(test, getSelf());
+      } else {
+        router.tell(new ConsistentHashableEnvelope(test, test), getSelf());
+      }
     } else if (msg instanceof String) {
       System.out.println("Sender " + getSelf().path().name() + " received response from "
           + sender().path().address().toString() + ": " + msg);
