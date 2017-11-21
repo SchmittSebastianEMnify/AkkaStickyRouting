@@ -1,17 +1,39 @@
 # AkkaStickyRouting
 
-Start the Sender:
+* Start-up the Sender App (starts 2 Senders):
 
+```bash
     mvn exec:java -Dexec.args=AkkaRouter.SenderApp
+```
 
-Start the Receiver:
+* Start a Receiver with the given _name_ (name must start with "rec"):
 
-    mvn exec:java -Dexec.args=AkkaRouter.ReceiverApp
+```bash
+    mvn exec:java -Dexec.args=AkkaRouter.ReceiverApp -Dname=receiver1
+ ```
  
+----
+
+** Helper scripts **
+
+- Start 3 Receivers:
+
+```bash
+    ./startReceivers.sh
+```
+
+- Stop all running Akka nodes:
+
+```bash
+    ./stopNodes.sh
+```
+
+ 
+----
  
  Switch between StickyRouter and consistent-hashing-group by setting the config "useStickyRouter"
  
- send.conf
+ * send.conf
  
     useStickyRouter = true
     numberOfUniqueMessages = 20
@@ -28,7 +50,7 @@ Start the Receiver:
         deployment {
           /sticky {
             router = "AkkaRouter.StickyRoutingGroup"
-            routees.paths = ["/user/rec"]
+            routees.paths = ["/user/rec*"]
             cluster {
               enabled = on
               use-role = recthingy
@@ -36,7 +58,8 @@ Start the Receiver:
           }
           /cons {
             router = consistent-hashing-group
-            routees.paths = ["/user/rec"]
+            routees.paths = ["/user/rec*"]
+            virtual-nodes-factor = 10
             cluster {
               enabled = on
               use-role = recthingy
@@ -62,7 +85,7 @@ Start the Receiver:
       }
     }
     
-rec.conf
+* rec.conf
 
     akka {
       loggers = ["akka.event.slf4j.Slf4jLogger"]

@@ -1,5 +1,6 @@
 package AkkaRouter;
 
+import AkkaRouter.Receiver.Response;
 import akka.actor.ActorRef;
 import akka.actor.UntypedActor;
 import akka.routing.ConsistentHashingRouter.ConsistentHashableEnvelope;
@@ -27,8 +28,15 @@ public class Sender extends UntypedActor {
     } else if (msg instanceof String) {
       StickyRoutingLogic.updateStickiness(Long.valueOf((String) msg),
           getContext().actorSelection(sender().path()));
-      System.out.println("Sender " + getSelf().path().name() + " received response from "
+      System.out.println(getSelf().path().name() + " received response from "
           + sender().path().address().toString() + ": " + msg);
+
+    } else if (msg instanceof Response) {
+      Response resp = (Response) msg;
+      StickyRoutingLogic.updateStickiness(resp.getMsgId(),
+          getContext().actorSelection(sender().path()));
+      System.out.println(getSelf().path().name() + " received " + resp);
+
     } else {
       unhandled(msg);
     }

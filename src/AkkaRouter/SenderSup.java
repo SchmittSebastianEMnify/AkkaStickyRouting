@@ -23,8 +23,8 @@ public class SenderSup extends UntypedActor {
     }
 
     // create two sender
-    ActorRef send1 = getContext().system().actorOf(Props.create(Sender.class, router), "send1");
-    ActorRef send2 = getContext().system().actorOf(Props.create(Sender.class, router), "send2");
+    ActorRef send1 = getContext().system().actorOf(Props.create(Sender.class, router), "sender1");
+    ActorRef send2 = getContext().system().actorOf(Props.create(Sender.class, router), "sender2");
 
 
     // send every 2 seconds beginning after 1 second

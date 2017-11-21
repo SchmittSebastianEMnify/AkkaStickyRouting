@@ -10,9 +10,11 @@ import akka.kernel.Bootable;
 public class ReceiverApp implements Bootable {
 
   public ReceiverApp() {
+    String name = System.getProperty("name", "receiver");
+
     Config config = ConfigFactory.load("rec");
     ActorSystem system = ActorSystem.create("stick", config);
-    system.actorOf(Receiver.props(), "rec");
+    system.actorOf(Receiver.props(), name);
   }
 
   @Override
