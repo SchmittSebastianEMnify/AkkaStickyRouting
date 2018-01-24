@@ -4,7 +4,6 @@
   <groupId>AkkaStickyRouting</groupId>
   <artifactId>AkkaStickyRouting</artifactId>
   <version>0.0.2-SNAPSHOT</version>
-  <packaging>pom</packaging>
   <name>Akka Routing Demo App</name>
   
   <properties>
