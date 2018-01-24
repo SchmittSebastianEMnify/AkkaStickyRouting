@@ -28,16 +28,15 @@ public class Sender extends UntypedActor {
     } else if (msg instanceof String) {
       StickyRoutingLogic.updateStickiness(Long.valueOf((String) msg),
           getContext().actorSelection(sender().path()));
-      String spaces = "";
-      for (int i=0;i<Integer.valueOf(sender().path().address().toString().substring(8));i++) spaces+=" ";
       System.out.println(getSelf().path().name() + " received response from "
           + sender().path().address().toString() + ": " + msg);
 
     } else if (msg instanceof Response) {
       Response resp = (Response) msg;
-      StickyRoutingLogic.updateStickiness(resp.getMsgId(),
-          getContext().actorSelection(sender().path()));
-      System.out.println(getSelf().path().name() + " received " + resp);
+      String spaces = "";
+
+      for (int i=0;i<Integer.valueOf(sender().path().name().toString().substring(8));i++) spaces+=" ";
+      System.out.println(spaces + getSelf().path().name() + " received " + resp);
 
     } else {
       unhandled(msg);

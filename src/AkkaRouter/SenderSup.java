@@ -22,9 +22,8 @@ public class SenderSup extends UntypedActor {
       router = getContext().system().actorOf(FromConfig.getInstance().props(), "cons");
     }
 
-    // create two sender
+    // create  sender
     ActorRef send1 = getContext().system().actorOf(Props.create(Sender.class, router), "sender1");
-    ActorRef send2 = getContext().system().actorOf(Props.create(Sender.class, router), "sender2");
 
 
     // send every 2 seconds beginning after 1 second
@@ -35,13 +34,6 @@ public class SenderSup extends UntypedActor {
             FiniteDuration.create(2, TimeUnit.SECONDS), send1, 1L,
             getContext().system().dispatcher(), null);
 
-    // send every 2 seconds beginning after 2 second
-    getContext()
-        .system()
-        .scheduler()
-        .schedule(FiniteDuration.create(2, TimeUnit.SECONDS),
-            FiniteDuration.create(2, TimeUnit.SECONDS), send2, 2L,
-            getContext().system().dispatcher(), null);
   }
 
   @Override
